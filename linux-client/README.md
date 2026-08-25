@@ -60,7 +60,7 @@ linux-client/
 2. 把整个 linux-client 目录拷贝到 Windows 电脑
 
 3. 双击 linux-client\download_wheels_windows.bat
-   （或右键 download_wheels_windows.ps1 -> 使用 PowerShell 运行）
+  （或右键 download_wheels_windows.ps1 -> 使用 PowerShell 运行）
    如下载不了，可PowerShell临时设置系统 pip 默认清华源，再运行脚本：
    python -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
    python -m pip config set global.trusted-host pypi.tuna.tsinghua.edu.cn
@@ -77,7 +77,7 @@ powershell -ExecutionPolicy Bypass -File .\download_wheels_windows.ps1 -PyVer 3.
 
 同时请在联网环境准备好麒麟系统的 RPM 包（目标机可能缺失），
 可从 [麒麟软件商店](https://software.kylinos.cn) 或 openKylin/麒麟官方源下载：
-
+     https://archive.kylinos.cn/kylin/KYLIN-ALL/
 ```
 portaudio-devel  ffmpeg  xclip  xdotool  pulseaudio  python3-evdev
 ```
