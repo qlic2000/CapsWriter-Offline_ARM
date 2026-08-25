@@ -1,14 +1,21 @@
 @echo off
 REM ============================================================
-REM  CapsWriter Offline Linux 客户端 —— Windows 联网机一键下载
-REM  双击运行即可，内部调用 download_wheels_windows.ps1
-REM  目标机默认按 Python 3.7（银河麒麟 V10 自带）下载 aarch64 包
+REM  CapsWriter Offline Linux Client - Windows one-click wheel download
+REM
+REM  Double-click to run. It calls download_wheels_windows.ps1
+REM  Target: Kylin V10 arm64, default Python 3.7 (system python).
+REM
+REM  To use another target Python version (e.g. 3.8), edit the two
+REM  "-PyVer 3.7" arguments below accordingly.
+REM
+REM  NOTE: Keep this file pure ASCII. Non-ASCII characters in a .bat
+REM        depend on the console code page and can break cmd parsing.
 REM ============================================================
-chcp 65001 >nul
 cd /d "%~dp0"
 
 echo.
-echo [*] 正在为 arm64 银河麒麟 V10 (Python 3.7) 下载离线依赖...
+echo [*] Downloading aarch64 wheels for Kylin V10 (Python 3.7)...
+echo     Messages below may be shown in Chinese by the PowerShell script.
 echo.
 
 where pwsh >nul 2>nul
