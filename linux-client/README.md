@@ -61,6 +61,9 @@ linux-client/
 
 3. 双击 linux-client\download_wheels_windows.bat
    （或右键 download_wheels_windows.ps1 -> 使用 PowerShell 运行）
+   如下载不了，可PowerShell临时设置系统 pip 默认清华源，再运行脚本：
+   python -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+   python -m pip config set global.trusted-host pypi.tuna.tsinghua.edu.cn
 
 4. 等待完成，wheels\ 目录会生成约 16 个 .whl 文件（aarch64 / cp37）
 ```
