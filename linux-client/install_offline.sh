@@ -4,7 +4,7 @@
 #
 # 功能：
 #   1. 检查 python3 版本（>= 3.7）
-#   2. 检查/提示系统级依赖：ffmpeg、xclip、xdotool、portaudio、pulseaudio
+#   2. 检查/提示系统级依赖：ffmpeg、xclip、xdotool、portaudio、pulseaudio、python3-evdev
 #   3. 创建隔离 venv 并从 wheels/ 目录离线安装全部 Python 依赖
 #   4. 输出后续使用说明
 #
@@ -33,8 +33,8 @@ if [ "$PYSUM" -lt 307 ]; then
     echo "[✗] 需要 Python >= 3.7，当前 $PYVER"
     exit 1
 fi
-if [ "$PYSUM" -ge 300 ] && [ "$PYVER" = "3.7" ]; then
-    echo "[i] 检测到 Python 3.7（麒麟 V10 默认），依赖包将按兼容模式安装"
+if [ "$PYVER" = "3.7" ]; then
+    echo "[i] 检测到 Python 3.7（麒麟 V10 默认），与 wheels 包版本匹配检查通过"
 fi
 
 # ---------- 2. 系统依赖检查（仅提示，不强制）----------
@@ -43,6 +43,14 @@ check_cmd() {
         echo "  [✓] $1 已安装"
     else
         echo "  [!] 缺少 $1 —— $2"
+    fi
+}
+
+check_pylib() {
+    if python3 -c "import $1" >/dev/null 2>&1; then
+        echo "  [✓] 系统包 $2 已就绪"
+    else
+        echo "  [!] 缺少系统包 $2 —— $3"
     fi
 }
 
@@ -58,13 +66,12 @@ check_cmd pulseaudio "音频后端 PulseAudio（缺失时自动走 ALSA）"
 if ldconfig -p 2>/dev/null | grep -q portaudio; then
     echo "  [✓] libportaudio 已安装"
 else
-    echo "  [!] 缺少 libportaudio2/portaudio-devel —— 录音必需！"
+    echo "  [!] 缺少 libportaudio —— 录音必需！"
     echo "      麒麟源: sudo yum install portaudio-devel"
 fi
 
-if command -v ffmpeg >/dev/null && ! ldconfig -p 2>/dev/null | grep -q portaudio; then
-    echo "  [!] 注意：ffmpeg 通常已自带 portaudio，但 sounddevice 仍需系统库"
-fi
+# evdev：pynput 在 Linux 上的依赖，PyPI 无 aarch64 轮子，必须用系统 RPM 包
+check_pylib evdev python3-evdev "pynput 键盘监听必需 (sudo yum install python3-evdev)"
 
 # 图形会话检测
 echo ""
@@ -79,14 +86,14 @@ fi
 # ---------- 3. venv + 离线安装 ----------
 echo ""
 echo "[*] 创建虚拟环境 $VENV_DIR ..."
-python3 -m venv "$VENV_DIR"
+# --system-site-packages: 允许引用系统 RPM 安装的包（如 python3-evdev）
+python3 -m venv --system-site-packages "$VENV_DIR"
 
 source "$VENV_DIR/bin/activate"
 
 echo "[*] 从 $WHEELS_DIR 离线安装 Python 依赖..."
-pip install --no-index --find-links "$WHEELS_DIR" -r requirements.txt \
-    || pip install --no-index --find-links "$WHEELS_DIR" \
-        websockets sounddevice pynput pypinyin rapidfuzz rich colorama
+pip install --no-index --find-links "$WHEELS_DIR" \
+    websockets sounddevice pynput pypinyin rapidfuzz rich colorama cffi
 
 deactivate
 
