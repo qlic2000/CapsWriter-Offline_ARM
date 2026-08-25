@@ -16,12 +16,21 @@
 #  (Kylin V10 system python). Change it if the target uses another
 #  version such as 3.8 / 3.10.
 #
+#  Network:
+#    Uses the Tsinghua PyPI mirror by default (much more stable than
+#    pypi.org direct access from China; the frequent RemoteDisconnected
+#    retries come from unstable routes to pypi.org). Override with:
+#      -IndexUrl https://pypi.org/simple          official index
+#      -Proxy http://127.0.0.1:7890               local HTTP proxy
+#
 #  NOTE: Keep this file ASCII-only. It parses correctly under any
 #        console code page and any PowerShell version.
 # ============================================================
 param(
     [string]$PyVer = "3.7",
-    [string]$OutDir = "wheels"
+    [string]$OutDir = "wheels",
+    [string]$IndexUrl = "https://pypi.tuna.tsinghua.edu.cn/simple",
+    [string]$Proxy = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -45,6 +54,8 @@ Write-Host " CapsWriter Offline Linux Client - Wheel Downloader"
 Write-Host " Host  : $(& $Python --version) (used to run pip only)"
 Write-Host " Target: Kylin V10 arm64, Python $PyVer"
 Write-Host " Output: $((Resolve-Path .).Path)\$OutDir"
+Write-Host " Index : $IndexUrl"
+if ($Proxy) { Write-Host " Proxy : $Proxy" }
 Write-Host "==============================================" -ForegroundColor Cyan
 
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Path $OutDir | Out-Null }
