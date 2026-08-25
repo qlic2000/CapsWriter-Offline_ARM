@@ -1,0 +1,19 @@
+# cw_linux Linux 客户端运行时依赖（aarch64 / 银河麒麟 V10）
+# 在有互联网的 x86_64 或 aarch64 机器上执行 build_wheels.sh 下载全部离线包
+
+# Web 服务通信
+websockets>=10.4,<16
+
+# 音频采集（PortAudio 绑定，需系统已装 libportaudio2 / portaudio-devel）
+sounddevice>=0.4.6
+
+# 键盘监听与模拟输入（X11 后端）
+pynput>=1.7.6
+
+# 热词音素匹配
+pypinyin>=0.49
+rapidfuzz>=3.0
+
+# 控制台输出
+rich>=13.0
+colorama>=0.4.6
