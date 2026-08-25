@@ -1,0 +1,21 @@
+# cw_linux Linux 客户端运行时依赖（aarch64 / 银河麒麟 V10）
+# 在有互联网的 Windows 机器上执行 download_wheels_windows.bat 交叉下载全部离线包
+#
+# 注意：目标机为银河麒麟 V10 自带 Python 3.7，所有版本上限均为此做了兼容。
+
+# Web 服务通信（14+ 需要 py3.8，故上限 15.x）
+websockets>=10.4,<16
+
+# 音频采集（PortAudio 绑定，需系统已装 portaudio-devel）
+sounddevice>=0.4.6
+
+# 键盘监听与模拟输入（X11 后端；1.8 起 pynput 依赖 pywin32 仅影响 Windows 平台）
+pynput>=1.7.6
+
+# 热词音素匹配
+pypinyin>=0.44
+rapidfuzz>=2.0
+
+# 控制台输出
+rich>=12.0
+colorama>=0.4.4
